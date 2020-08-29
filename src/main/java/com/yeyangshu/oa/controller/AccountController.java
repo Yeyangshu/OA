@@ -1,5 +1,6 @@
 package com.yeyangshu.oa.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.yeyangshu.oa.entity.Account;
 import com.yeyangshu.oa.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,9 +73,10 @@ public class AccountController {
      * @return
      */
     @RequestMapping("/list")
-    public String list(Model model) {
-        List<Account> accountList = accountService.findAll();
-        model.addAttribute("accountList", accountList);
-        return "/account/list";
+    public String list(@RequestParam(defaultValue = "1") int pageNum, @RequestParam(defaultValue = "5") int pageSize, Model model) {
+        System.out.println("pageNum:" + pageNum + "，pageSize：" + pageSize);
+        PageInfo<Account> page = accountService.findByPage(pageNum, pageSize);
+        model.addAttribute("page", page);
+        return "account/list";
     }
 }
