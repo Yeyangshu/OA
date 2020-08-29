@@ -1,24 +1,18 @@
 package com.yeyangshu.oa;
 
+/**
+ * 通用 Json 返回报文
+ */
 public class RespStat {
 
-	/**
-	 * JSON报文
-	 * 状态码 
-	 * 用于前端判断   200  = 成功
-	 * 400\500 出错
-	 * 
-	 * msg = 信息
-	 */
-	
+	/** 前端校验返回码 200为成功，400/500出错 */
 	private int code;
+	/** 状态信息 */
 	private String msg;
+	/** 返回数据 */
 	private String data;
 	
-	
-	
 	public RespStat() {
-		
 		super();
 	}
 	
@@ -28,8 +22,12 @@ public class RespStat {
 		this.msg = msg;
 		this.data = data;
 	}
-	
-	
+
+	public RespStat(int code, String msg) {
+		this.code = code;
+		this.msg = msg;
+	}
+
 	public int getCode() {
 		return code;
 	}
@@ -49,11 +47,11 @@ public class RespStat {
 		this.data = data;
 	}
 
-	public static com.yeyangshu.oa.RespStat build(int i) {
-		return new com.yeyangshu.oa.RespStat(200, "ok", "meiyou");
+	public static RespStat build(int code) {
+		return new RespStat(200, "ok", "none");
 	}
-	
-	
-	
-	
+
+	public static RespStat build(int code, String message) {
+		return new RespStat(code, message);
+	}
 }

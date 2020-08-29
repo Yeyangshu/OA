@@ -1,6 +1,7 @@
 package com.yeyangshu.oa.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.yeyangshu.oa.RespStat;
 import com.yeyangshu.oa.entity.Account;
 import com.yeyangshu.oa.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,5 +79,19 @@ public class AccountController {
         PageInfo<Account> page = accountService.findByPage(pageNum, pageSize);
         model.addAttribute("page", page);
         return "account/list";
+    }
+
+
+    /**
+     * 异步删除用户操作
+     * @param id
+     * @return
+     */
+    @RequestMapping("/deleteById")
+    @ResponseBody
+    public RespStat deleteById(int id) {
+        System.out.println("deleteById：" + id);
+        // 标记用户是否删除
+        return accountService.deleteById(id);
     }
 }

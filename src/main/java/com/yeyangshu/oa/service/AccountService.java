@@ -2,6 +2,7 @@ package com.yeyangshu.oa.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yeyangshu.oa.RespStat;
 import com.yeyangshu.oa.entity.Account;
 import com.yeyangshu.oa.mapper.AccountExample;
 import com.yeyangshu.oa.mapper.AccountMapper;
@@ -54,4 +55,24 @@ public class AccountService {
         // 导航页码数固定位5页
         return new PageInfo<>(accountList, 5);
     }
+
+    /**
+     * 操作数据库进行删除操作
+     * 注意事项：
+     * 1、需要提醒用户是否真的删除
+     * 2、使用删除标记，使数据不会永远删除（同理 update，只增加而不去直接修改表内容）
+     * @param id
+     * @return
+     */
+    public RespStat deleteById(int id) {
+        // 删除后会返回行数
+        int rows = accountMapper.deleteByPrimaryKey(id);
+        System.out.println("delete by id, rows is ：" + rows);
+        if (rows == 1) {
+            return RespStat.build(200);
+        } else {
+            return RespStat.build(500, "删除错误");
+        }
+    }
+
 }
