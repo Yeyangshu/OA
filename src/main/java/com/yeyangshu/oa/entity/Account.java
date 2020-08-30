@@ -1,6 +1,7 @@
 package com.yeyangshu.oa.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 用户信息
@@ -29,8 +30,14 @@ public class Account implements Serializable {
     /** 用户权限 */
     private String role;
 
+    /** 用户所有的角色 */
+    private List<Role> roleList;
 
-    /** setter and getter */
+    /** 用户所有的权限 */
+    private List<Permission> permissionList;
+
+
+    /** setter and ogetter */
     public Integer getId() {
         return id;
     }
@@ -87,6 +94,22 @@ public class Account implements Serializable {
         this.role = role;
     }
 
+    public List<Role> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(List<Role> roleList) {
+        this.roleList = roleList;
+    }
+
+    public List<Permission> getPermissionList() {
+        return permissionList;
+    }
+
+    public void setPermissionList(List<Permission> permissionList) {
+        this.permissionList = permissionList;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -124,19 +147,16 @@ public class Account implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", loginName=").append(loginName);
-        sb.append(", password=").append(password);
-        sb.append(", nickName=").append(nickName);
-        sb.append(", age=").append(age);
-        sb.append(", location=").append(location);
-        sb.append(", role=").append(role);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
+        return "Account{" +
+                "id=" + id +
+                ", loginName='" + loginName + '\'' +
+                ", password='" + password + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", age=" + age +
+                ", location='" + location + '\'' +
+                ", role='" + role + '\'' +
+                ", roleList=" + roleList +
+                ", permissionList=" + permissionList +
+                '}';
     }
 }

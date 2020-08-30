@@ -10,6 +10,40 @@
         <result column="location" jdbcType="VARCHAR" property="location"/>
         <result column="role" jdbcType="VARCHAR" property="role"/>
     </resultMap>
+
+    <!-- 自定义结果集，包含一对多关系，包含两个集合 -->
+    <resultMap id="selectByPermissionResultMap" type="com.yeyangshu.oa.entity.Account">
+        <id column="aid" jdbcType="INTEGER" property="id"/>
+        <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="nick_name" jdbcType="VARCHAR" property="nickName"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="location" jdbcType="VARCHAR" property="location"/>
+        <result column="role" jdbcType="VARCHAR" property="role"/>
+        <collection property="roleList" ofType="com.yeyangshu.oa.entity.Role">
+            <id column="rid" jdbcType="INTEGER" property="id"/>
+            <result column="rname" jdbcType="VARCHAR" property="name"/>
+        </collection>
+        <collection property="permissionList" ofType="com.yeyangshu.oa.entity.Permission">
+            <id column="pid" jdbcType="INTEGER" property="id"/>
+            <result column="uri" jdbcType="VARCHAR" property="uri"/>
+            <result column="pname" jdbcType="VARCHAR" property="name"/>
+            <result column="c" jdbcType="BIT" property="c"/>
+            <result column="r" jdbcType="BIT" property="r"/>
+            <result column="u" jdbcType="BIT" property="u"/>
+            <result column="d" jdbcType="BIT" property="d"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectByPermission" resultMap="selectByPermissionResultMap">
+        SELECT a.id as aid, a.login_name, a.password, a.location, r.id AS rid, r.name AS rname, p.id as pid, p.uri,
+            p.name AS pname, p.c, p.r, p.u, p.d  FROM account a
+        INNER JOIN account_role AS ar ON a.id = ar.account_id
+        INNER JOIN role AS r ON ar.role_id = r.id
+        LEFT JOIN role_permission AS rp ON r.id = rp.role_id
+        LEFT JOIN permission AS p ON rp.permission_id = p.id;
+    </select>
+
     <sql id="Example_Where_Clause">
         <where>
             <foreach collection="oredCriteria" item="criteria" separator="or">

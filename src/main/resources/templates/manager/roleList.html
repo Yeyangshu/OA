@@ -80,7 +80,7 @@
                         <li><a href="#">Another action</a></li>
                         <li><a href="#">Something else here</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="/account/logOut">退出登录</a></li>
+                        <li><a href="/account/loginOut">退出登录</a></li>
                     </ul>
                 </li>
             </ul>
@@ -90,32 +90,24 @@
 </nav>
 <!--  导航栏                      结束  			↑       -->
 
-<h1>员工列表</h1>
+<h1>角色管理</h1>
 <!--  列表       开始   ↓ -->
 <div class="table-responsive">
     <table class="table table-hover">
         <tr>
             <th>序号</th>
             <th>工号</th>
-            <th>loginName</th>
-            <th>nickName</th>
-            <th>age</th>
-            <th>location</th>
-            <th>role</th>
+            <th>name</th>
             <th>操作</th>
         </tr>
 
-        <tr th:each="account : ${page.list}">
-            <td th:text="${accountStat.count}"></td>
-            <td th:text="${account.id}">工号</td>
-            <td th:text="${account.loginName}">loginName</td>
-            <td th:text="${account.nickName}">nickName</td>
-            <td th:text="${account.age}">age</td>
-            <td th:text="${account.location}">location</td>
-            <td th:text="${account.role}">role</td>
+        <tr th:each="role : ${page.list}">
+            <td th:text="${roleStat.count}"></td>
+            <td th:text="${role.id}">工号</td>
+            <td th:text="${role.name}">name</td>
             <td>
-                <a class="btn btn-danger" th:href="@{'javascript:deleteById('+${account.id}+');'}">删除</a>
-                <a class="btn btn-info" th:href="@{'javascript:deleteById('+${account.id}+');'}">修改密码</a>
+                <a class="btn btn-danger" th:href="@{'javascript:deleteById('+${role.id}+');'}">删除</a>
+                <a class="btn btn-info" th:href="@{'javascript:deleteById('+${role.id}+');'}">修改密码</a>
             </td>
         </tr>
     </table>
@@ -127,7 +119,7 @@
         <!--当前页为第一页时，禁用上一页-->
         <li th:class="${page.prePage} == 0 ? 'disabled' : ''">
             <!--第一页禁用链接-->
-            <a th:href="@{${page.prePage} == 0 ? 'javascript:void(0)' :'/account/list?pageNum='+${page.prePage}}"
+            <a th:href="@{${page.prePage} == 0 ? 'javascript:void(0)' :'/manager/roleList?pageNum='+${page.prePage}}"
                aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
             </a>
@@ -135,13 +127,13 @@
 
         <!--分页总页数循环 th:each="pageNum : ${page.navigatepageNums}-->
         <!--th:href 需要使用静态+动态-->
-        <li th:each="pageNum : ${page.navigatepageNums}"><a th:href="@{'/account/list?pageNum=' + ${pageNum}}">[[${pageNum}]]</a>
+        <li th:each="pageNum : ${page.navigatepageNums}"><a th:href="@{'/manager/roleList?pageNum=' + ${pageNum}}">[[${pageNum}]]</a>
         </li>
 
         <!--下一页-->
         <!--当前页为最后一页时，禁用下一页-->
         <li th:class="${page.nextPage} == 0 ? 'disabled' : ''">
-            <a th:href="@{${page.nextPage} == 0 ? 'javascript:void(0)' :'/account/list?pageNum=' + ${page.nextPage}}"
+            <a th:href="@{${page.nextPage} == 0 ? 'javascript:void(0)' :'/manager/roleList?pageNum=' + ${page.nextPage}}"
                aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
             </a>

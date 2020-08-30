@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>办公无纸化系统</title>
@@ -16,8 +16,6 @@
 <!--  导航栏                      开始  			 ↓ -->
 
 <nav class="navbar navbar-default">
-
-
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
@@ -30,10 +28,8 @@
             <a class="navbar-brand" href="/index">首页</a>
         </div>
 
-
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-
             <ul class="nav navbar-nav">
                 <!--文件管理模块-->
                 <li class=""><a href="#">公文流转</a></li>
@@ -77,7 +73,8 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">
-                        欢迎您 : [[${session.account.loginName}]] <span class="caret"></span> </a>
+
+                        欢迎你 : [[${session.account.loginName}]] <span class="caret"></span> </a>
                     <ul class="dropdown-menu">
                         <li><a href="/account/profile">个人信息</a></li>
                         <li><a href="#">Another action</a></li>
@@ -87,25 +84,93 @@
                     </ul>
                 </li>
             </ul>
-
             <!-- 已登录用户   ↑ -->
         </div><!-- /.navbar-collapse -->
-
-
     </div><!-- /.container-fluid -->
 </nav>
-
-
 <!--  导航栏                      结束  			↑       -->
 
-<!--  巨幕       开始   ↓ -->
-<div class="jumbotron">
-    <h1>欢迎使用无纸化办公系统</h1>
-    <p>version 1.0</p>
-    <p></p>
-</div>
-<!--  巨幕       结束   ↑ -->
+<h1>权限管理</h1>
+<p></p>
+<form id="p">
+    <div class="form-group">
+        <label for="permissionName">权限名称</label>
+        <input type="text" class="form-control" id="permissionName" name="name" th:value="${permission} == null ? '' : ${permission.name}">
+    </div>
+    <div class="form-group">
+        <label for="permissionURI">uri</label>
+        <input type="text" class="form-control" id="permissionURI" name="uri" th:value="${permission} == null ? '' : ${permission.uri}">
+    </div>
+    <div class="form-group">
+        <label for="c">c</label>
+        <input type="checkbox" id="c">
+    </div>
+    <div class="form-group">
+        <label for="r">r</label>
+        <input type="checkbox" id="r">
+    </div>
+    <div class="form-group">
+        <label for="u">u</label>
+        <input type="checkbox" id="u">
+    </div>
+    <div class="form-group">
+        <label for="d">d</label>
+        <input type="checkbox" id="d">
+    </div>
+    <div class="form-group">
+        <label for="id">id</label>
+        <input type="text" class="form-control" id="id" name="id" th:value="${permission} == null ? '' : ${permission.id}">
+    </div>
+    <button type="submit" class="btn btn-default">
+        <a href="javascript:smt();">提交</a>
+    </button>
+</form>
 
+[[${permission}]]<br>
 
+<script type="text/javascript">
+    function smt() {
+        const formObject = {};
+        // 将数据封装成数组
+        const data = $("#p").serializeArray();
+        // jQuery循环
+        $.each(data, function(i, item) {
+            formObject[item.name] = item.value;
+        });
+        // crud checkbox 是否勾选属性
+        formObject["c"] = $('#c').is(':checked');
+        formObject["r"] = $('#r').is(':checked');
+        formObject["u"] = $('#u').is(':checked');
+        formObject["d"] = $('#d').is(':checked');
+
+        console.log("data=" + data);
+        console.log("formObject=" + formObject);
+        console.log("formObject=" + JSON.stringify(formObject));
+
+        var id = formObject["id"];
+        var url = '';
+        if (id === '' || id === null) {
+            url = "/api/v1/manager/permission/add";
+        } else {
+            url = "/api/v1/manager/permission/update";
+        }
+
+        // 使用ajax
+        $.ajax({
+            type: "post",
+            url: url,
+            contentType: "application/json",
+            // 转化为json字符串
+            data: JSON.stringify(formObject),
+            dataType: "json",
+            success: function (msg) {
+                console.log("success：" + msg)
+            },
+            error: function (msg) {
+                console.log("error：" + msg)
+            }
+        })
+    }
+</script>
 </body>
 </html>

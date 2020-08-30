@@ -48,7 +48,10 @@ public class AccountService {
      * @return
      */
     public PageInfo<Account> findByPage(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
+        //PageHelper.startPage(pageNum, pageSize);
+
+        List<Account> accounts = accountMapper.selectByPermission();
+        System.out.println(accounts.toString());
 
         AccountExample example = new AccountExample();
         List<Account> accountList = accountMapper.selectByExample(example);

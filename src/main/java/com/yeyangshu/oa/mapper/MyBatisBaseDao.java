@@ -1,5 +1,6 @@
 package com.yeyangshu.oa.mapper;
 
+import com.yeyangshu.oa.entity.Permission;
 import org.apache.ibatis.annotations.Param;
 
 import java.io.Serializable;
