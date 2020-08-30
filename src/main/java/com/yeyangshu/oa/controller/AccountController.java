@@ -3,6 +3,7 @@ package com.yeyangshu.oa.controller;
 import com.github.pagehelper.PageInfo;
 import com.yeyangshu.oa.RespStat;
 import com.yeyangshu.oa.entity.Account;
+import com.yeyangshu.oa.entity.SystemConfig;
 import com.yeyangshu.oa.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,13 +34,17 @@ public class AccountController {
     @Autowired
     AccountService accountService;
 
+    @Autowired
+    SystemConfig systemConfig;
+
     /**
      * 登录页面，异步验证登录信息
      *
      * @return login.html
      */
     @RequestMapping("/login")
-    public String login() {
+    public String login(Model model) {
+        model.addAttribute("systemConfig", systemConfig);
         return "account/login";
     }
 
