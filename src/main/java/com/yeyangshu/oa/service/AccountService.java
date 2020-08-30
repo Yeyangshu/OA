@@ -78,4 +78,11 @@ public class AccountService {
         }
     }
 
+    /**
+     * 更新用户信息
+     * @param account
+     */
+    public void update(Account account) {
+        accountMapper.updateByPrimaryKeySelective(account);
+    }
 }

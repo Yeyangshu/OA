@@ -24,7 +24,7 @@ public class Account implements Serializable {
     /** 用户年龄 */
     private Integer age;
 
-    /** 用户住址 */
+    /** 用户头像地址 */
     private String location;
 
     /** 用户权限 */

@@ -80,22 +80,18 @@
 
 
             <!--  当前用户 已登录 -->
-
             <ul th:if="${session.account}!=null" class="nav navbar-nav navbar-right">
                 <li class="dropdown active">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">
-                        欢迎回来:
-                        [[${session.account}==null?'':${session.account.loginName}]]
-
-
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                         欢迎回来:
+                        [[${session.account} == null ? '' : ${session.account.loginName}]]
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#">Action</a></li>
                         <li><a href="#">Another action</a></li>
                         <li><a href="#">Something else here</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="/account/logOut">退出登录</a></li>
+                        <li><a href="/account/loginOut">退出登录</a></li>
                     </ul>
                 </li>
             </ul>
@@ -116,29 +112,24 @@
 <!-- 页头 结束 ↑ -->
 
 <div align="center" style="width: 300px">
-    <form action="/account/fileUploadController" method="post" enctype="multipart/form-data">
+    <form action="/account/updateProfile" method="post" enctype="multipart/form-data">
         <table class="table table-bordered">
             <tr>
                 <td>登录名：</td>
                 <td>[[${session.account.loginName}]]</td>
             </tr>
-
             <tr>
                 <td>密码：</td>
                 <td><input type="password" name="password"></td>
 
             </tr>
-
             <tr>
                 <td>头像：</td>
                 <td>
                     上传文件：<input type="file" name="filename"/><br/>
                     <input type="submit"/>
                 </td>
-
             </tr>
-
-
         </table>
     </form>
 </div>

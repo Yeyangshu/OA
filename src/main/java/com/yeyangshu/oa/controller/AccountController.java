@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -112,38 +113,37 @@ public class AccountController {
     }
 
     /**
-     * 个人资料
+     * 跳转个人资料页面
      *
      * @return
      */
     @RequestMapping("/profile")
     public String profile() {
-        try {
-            File path = new File(ResourceUtils.getURL("classpath:").getPath());
-            File upload = new File(path.getAbsolutePath(), "static/upload/");
-            System.out.println(upload.getAbsolutePath());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
         return "account/profile";
     }
 
     /**
-     * 文件上传
+     * 更新个人资料
      * @param filename
      * @param password
      * @return
      */
-    @RequestMapping("/fileUpload")
-    public String fileUpload(MultipartFile filename, String password) {
-        System.out.println(filename);
-        System.out.println("password" + password);
-
+    @RequestMapping("/updateProfile")
+    public String fileUpload(MultipartFile filename, String password, HttpServletRequest request) {
+        // 不要从表单中获取用户信息，表单可能会伪造数据
+        Account account = (Account)request.getSession().getAttribute("account");
         try {
-            File path = new File(ResourceUtils.getURL("classpath:").getPath());
-            File upload = new File(path.getAbsolutePath(), "static/upload/");
-            System.out.println("upload:" + upload);
-            filename.transferTo(new File(upload + "/" + filename.getOriginalFilename()));
+            // 定位当前项目路径
+            // File path = new File(ResourceUtils.getURL("classpath:").getPath());
+            // File upload = new File(path.getAbsolutePath(), "static/uploads/");
+            // filename.transferTo(new File(upload + "/" + filename.getOriginalFilename()));
+
+            // 文件转存+文件重名
+            filename.transferTo(new File("d:/study/project/springboot-oa/uploads/" + filename.getOriginalFilename()));
+
+            account.setPassword(password);
+            account.setLocation(filename.getOriginalFilename());
+            accountService.update(account);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
