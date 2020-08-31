@@ -7,9 +7,11 @@
     <!-- 最新的 Bootstrap 核心 css 文件 -->
     <!-- 在url上 使用 @标签 可以帮我们 自动加上 contextpath -->
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/skins/all.css}">
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
     <script th:src="@{/js/common/jquery-3.4.1.min.js}"></script>
     <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/icheck.min.js}"></script>
 </head>
 <body>
 
@@ -106,9 +108,11 @@
         <label for="roleName">权限列表</label>
     </div>
     <span th:each="p : ${permissionList}">
+        <label>[[${p.name}]]</label>
         <!-- 自动勾选已有权限 -->
-        <input name="permissionIds" type="checkbox" th:checked="${role.permissionList.contains(p)}?'true':'false'" th:value="${p.id}">[[${p.name}]]
+        <input name="permissionIds" type="checkbox" th:checked="${role.permissionList.contains(p)}?'true':'false'" th:value="${p.id}">
     </span>
+    <p></p>
     <button type="submit" class="btn btn-default">
         <a href="javascript:smt();">提交</a>
     </button>
