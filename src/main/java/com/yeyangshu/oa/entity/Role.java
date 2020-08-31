@@ -1,6 +1,7 @@
 package com.yeyangshu.oa.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 角色表
@@ -19,6 +20,9 @@ public class Role implements Serializable {
     /** 角色名称 */
     private String name;
 
+    /** 角色权限列表 */
+    private List<Permission> permissionList;
+
     /** setter and getter */
     public Integer getId() {
         return id;
@@ -34,6 +38,14 @@ public class Role implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Permission> getPermissionList() {
+        return permissionList;
+    }
+
+    public void setPermissionList(List<Permission> permissionList) {
+        this.permissionList = permissionList;
     }
 
     @Override
@@ -63,14 +75,10 @@ public class Role implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", name=").append(name);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
+        return "Role{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", permissionList=" + permissionList +
+                '}';
     }
 }

@@ -10,8 +10,11 @@ import com.yeyangshu.oa.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 /**
  * 系统设置模块
@@ -58,6 +61,22 @@ public class ManagerController {
         PageInfo<Role> page = roleService.findByPage(pageNum, pageSize);
         model.addAttribute("page", page);
         return "manager/roleList";
+    }
+
+    /**
+     * 角色添加/修改权限
+     * @param id
+     * @param model
+     * @return
+     */
+    @RequestMapping("/rolePermission/{id}")
+    public String rolePermission(@PathVariable int id, Model model) {
+        System.out.println("role permission id is " + id);
+        Role role = roleService.findById(id);
+        List<Permission> permissionList = permissionService.findAll();
+        model.addAttribute("role", role);
+        model.addAttribute("permissionList", permissionList);
+        return "manager/rolePermission";
     }
 
     /**

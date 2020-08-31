@@ -28,4 +28,22 @@ public class RoleService {
         // 导航页码数固定位5页
         return new PageInfo<>(roleList, 5);
     }
+
+    /**
+     * 查找角色信息
+     * @param id
+     * @return
+     */
+    public Role findById(int id) {
+        return roleMapper.findById(id);
+    }
+
+    /**
+     * 批量为角色添加权限
+     * @param id
+     * @param permissionIds
+     */
+    public void addPermission(int id, int[] permissionIds) {
+        roleMapper.addPermission(id, permissionIds);
+    }
 }

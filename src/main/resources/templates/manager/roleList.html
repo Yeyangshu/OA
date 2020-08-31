@@ -106,8 +106,7 @@
             <td th:text="${role.id}">工号</td>
             <td th:text="${role.name}">name</td>
             <td>
-                <a class="btn btn-danger" th:href="@{'javascript:deleteById('+${role.id}+');'}">删除</a>
-                <a class="btn btn-info" th:href="@{'javascript:deleteById('+${role.id}+');'}">修改密码</a>
+                <a class="btn btn-info" th:href="@{'javascript:permissionModify('+${role.id}+');'}">权限</a>
             </td>
         </tr>
     </table>
@@ -166,6 +165,10 @@
 </div>
 
 <script type="text/javascript">
+    function permissionModify(id) {
+        window.location.href="/manager/rolePermission/" + id
+    }
+
     $(function () {
         window.Modal = function () {
             var reg = new RegExp("\\[([^\\[\\]]*?)\\]", 'igm');

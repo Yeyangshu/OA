@@ -1,4 +1,4 @@
-package com.yeyangshu.oa.controller;
+package com.yeyangshu.oa.controller.test;
 
 import com.yeyangshu.oa.RespStat;
 import com.yeyangshu.oa.entity.Permission;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/v1/manager/permission")
-public class ManagerRestController {
+public class PermissionManagerRestController {
 
     @Autowired
     PermissionService permissionService;

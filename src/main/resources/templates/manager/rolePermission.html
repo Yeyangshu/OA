@@ -90,85 +90,52 @@
 </nav>
 <!--  导航栏                      结束  			↑       -->
 
-<h1>权限管理</h1>
+<h1>角色管理</h1>
 <p></p>
-<form id="p">
-    <div class="form-group">
-        <label for="permissionName">权限名称</label>
-        <input type="text" class="form-control" id="permissionName" name="name" th:value="${permission} == null ? '' : ${permission.name}">
-    </div>
-    <div class="form-group">
-        <label for="permissionURI">uri</label>
-        <input type="text" class="form-control" id="permissionURI" name="uri" th:value="${permission} == null ? '' : ${permission.uri}">
-    </div>
-    <div class="form-group">
-        <label for="c">c</label>
-        <input type="checkbox" id="c" th:checked="${permission} == null ? 'false' : ${permission.c}">
-    </div>
-    <div class="form-group">
-        <label for="r">r</label>
-        <input type="checkbox" id="r"  th:checked="${permission} == null ? 'false' : ${permission.r}">
-    </div>
-    <div class="form-group">
-        <label for="u">u</label>
-        <input type="checkbox" id="u"  th:checked="${permission} == null ? 'false' : ${permission.u}">
-    </div>
-    <div class="form-group">
-        <label for="d">d</label>
-        <input type="checkbox" id="d"  th:checked="${permission} == null ? 'false' : ${permission.d}">
-    </div>
-    <div class="form-group">
+<form id="role">
+    <div class="form-group" hidden="hidden">
         <label for="id">id</label>
-        <input type="text" class="form-control" id="id" name="id" th:value="${permission} == null ? '' : ${permission.id}">
+        <input type="text" class="form-control" id="id" name="id" th:value="${role} == null ? '' : ${role.id}">
     </div>
+    <div class="form-group">
+        <label for="roleName">角色名称</label>
+        <input type="text" disabled=disabled class="form-control" id="roleName" name="name" th:value="${role} == null ? '' : ${role.name}">
+    </div>
+    <p></p>
+    <div class="form-group">
+        <label for="roleName">权限列表</label>
+    </div>
+    <span th:each="p : ${permissionList}">
+        <!-- 自动勾选已有权限 -->
+        <input name="permissionIds" type="checkbox" th:checked="${role.permissionList.contains(p)}?'true':'false'" th:value="${p.id}">[[${p.name}]]
+    </span>
     <button type="submit" class="btn btn-default">
         <a href="javascript:smt();">提交</a>
     </button>
 </form>
 
-[[${permission}]]<br>
+[[${role}]]<br>
+[[${permissionList}]]<br>
 
 <script type="text/javascript">
     function smt() {
-        const formObject = {};
+        var formObject = {};
         // 将数据封装成数组
-        const data = $("#p").serializeArray();
+        var data = $("#role").serializeArray();
         // jQuery循环
         $.each(data, function(i, item) {
             formObject[item.name] = item.value;
         });
-        // crud checkbox 是否勾选属性
-        formObject["c"] = $('#c').is(':checked');
-        formObject["r"] = $('#r').is(':checked');
-        formObject["u"] = $('#u').is(':checked');
-        formObject["d"] = $('#d').is(':checked');
 
         console.log("data=" + data);
         console.log("formObject=" + formObject);
         console.log("formObject=" + JSON.stringify(formObject));
 
         var id = formObject["id"];
-        var url = '';
-        if (id === '' || id === null) {
-            url = "/api/v1/manager/permission/add";
-        } else {
-            url = "/api/v1/manager/permission/update";
-        }
+        var url = '/api/v1/manager/role/permission/add';
 
-        // 使用ajax
-        $.ajax({
-            type: "post",
-            url: url,
-            contentType: "application/json",
-            // 转化为json字符串
-            data: JSON.stringify(formObject),
-            dataType: "json",
-            success: function (msg) {
-                console.log("success：" + msg)
-            },
-            error: function (msg) {
-                console.log("error：" + msg)
-            }
+        $.post(url, data, function(data){
+            console.log(data)
         })
     }
 </script>

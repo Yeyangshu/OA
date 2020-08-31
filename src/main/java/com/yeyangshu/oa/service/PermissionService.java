@@ -44,6 +44,15 @@ public class PermissionService {
         return permission;
     }
 
+    /**
+     * 查找所有权限
+     * @return
+     */
+    public List<Permission> findAll() {
+        PermissionExample permissionExample = new PermissionExample();
+        return permissionMapper.selectByExample(permissionExample);
+    }
+
     public void update(Permission permission) {
         // 有值的进行更新
         permissionMapper.updateByPrimaryKeySelective(permission);

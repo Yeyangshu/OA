@@ -5,6 +5,39 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
     </resultMap>
+
+    <resultMap id="RoleResultMap" type="com.yeyangshu.oa.entity.Role">
+        <id column="rid" jdbcType="INTEGER" property="id"/>
+        <result column="rname" jdbcType="VARCHAR" property="name"/>
+        <collection property="permissionList" ofType="com.yeyangshu.oa.entity.Permission">
+            <id column="pid" jdbcType="INTEGER" property="id"/>
+            <result column="uri" jdbcType="VARCHAR" property="uri"/>
+            <result column="pname" jdbcType="VARCHAR" property="name"/>
+            <result column="c" jdbcType="BIT" property="c"/>
+            <result column="r" jdbcType="BIT" property="r"/>
+            <result column="u" jdbcType="BIT" property="u"/>
+            <result column="d" jdbcType="BIT" property="d"/>
+        </collection>
+    </resultMap>
+
+    <!-- 查找角色 -->
+    <select id="findById" resultMap="RoleResultMap">
+        select r.id as rid, r.name as rname, p.id as pid, p.name as pname, p.uri, p.c, p.r, p.u, p.d
+        from role as r
+        inner join role_permission as rp on r.id = rp.role_id
+        inner join permission as p on rp.permission_id = p.id
+        where r.id = #{id}
+    </select>
+
+    <!-- 赋予权限之前删除原来所有的权限 -->
+    <insert id="addPermission">
+        delete from role_permission where role_id = #{id};
+        insert into role_permission(role_id, permission_id) values
+        <foreach collection="permissionIds" item="pId" separator=",">
+            (#{id}, #{pId})
+        </foreach>
+    </insert>
+
     <sql id="Example_Where_Clause">
         <where>
             <foreach collection="oredCriteria" item="criteria" separator="or">
