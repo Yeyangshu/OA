@@ -1,4 +1,4 @@
-package com.yeyangshu.oa.controller.test;
+package com.yeyangshu.oa.controller.rest;
 
 import com.yeyangshu.oa.RespStat;
 import com.yeyangshu.oa.entity.Permission;

@@ -24,12 +24,7 @@ public class AccountService {
      * @return
      */
     public Account findByLoginNameAndPassword(String loginName, String password) {
-        AccountExample accountExample = new AccountExample();
-        accountExample.createCriteria()
-                .andLoginNameEqualTo(loginName)
-                .andPasswordEqualTo(password);
-        List<Account> accountListByLoginNameAndPsd = accountMapper.selectByExample(accountExample);;
-        return accountListByLoginNameAndPsd.size() == 0 ? null : accountListByLoginNameAndPsd.get(0);
+        return accountMapper.findByLoginNameAndPassword(loginName,password);
     }
 
     /**
