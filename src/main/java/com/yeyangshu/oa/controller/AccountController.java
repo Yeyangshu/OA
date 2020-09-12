@@ -1,11 +1,21 @@
 package com.yeyangshu.oa.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.github.tobato.fastdfs.domain.fdfs.MetaData;
+import com.github.tobato.fastdfs.domain.fdfs.StorePath;
+import com.github.tobato.fastdfs.domain.proto.storage.DownloadByteArray;
+import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.yeyangshu.oa.RespStat;
 import com.yeyangshu.oa.entity.Account;
 import com.yeyangshu.oa.entity.SystemConfig;
 import com.yeyangshu.oa.service.AccountService;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ResourceUtils;
@@ -15,11 +25,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 用户账号相关处理，登录等功能
@@ -37,6 +50,9 @@ public class AccountController {
 
     @Autowired
     SystemConfig systemConfig;
+
+    @Autowired
+    FastFileStorageClient fileStorageClient;
 
     /**
      * 登录页面，异步验证登录信息
@@ -124,6 +140,8 @@ public class AccountController {
 
     /**
      * 更新个人资料
+     * FastDFS 上传文件
+     *
      * @param filename
      * @param password
      * @return
@@ -131,24 +149,48 @@ public class AccountController {
     @RequestMapping("/updateProfile")
     public String fileUpload(MultipartFile filename, String password, HttpServletRequest request) {
         // 不要从表单中获取用户信息，表单可能会伪造数据
-        Account account = (Account)request.getSession().getAttribute("account");
+        Account account = (Account) request.getSession().getAttribute("account");
         try {
-            // 定位当前项目路径
-            // File path = new File(ResourceUtils.getURL("classpath:").getPath());
-            // File upload = new File(path.getAbsolutePath(), "static/uploads/");
-            // filename.transferTo(new File(upload + "/" + filename.getOriginalFilename()));
+            // 元数据
+            Set<MetaData> metaDataSet = new HashSet<MetaData>();
+            metaDataSet.add(new MetaData("Author", "yeyangshu"));
+            metaDataSet.add(new MetaData("CreateDate", new Date().toString()));
 
-            // 文件转存+文件重名
-            filename.transferTo(new File("d:/study/project/springboot-oa/uploads/" + filename.getOriginalFilename()));
+            try {
+                StorePath uploadFile = null;
+                uploadFile = fileStorageClient.uploadImageAndCrtThumbImage(filename.getInputStream(), filename.getSize(), FilenameUtils.getExtension(filename.getOriginalFilename()), metaDataSet);
+                // 下载文件
+                System.out.println("uploadFile.getPath()：" + uploadFile.getPath());
 
-            account.setPassword(password);
-            account.setLocation(filename.getOriginalFilename());
+                account.setPassword(password);
+                account.setLocation("http://192.168.163.111/" + uploadFile.getFullPath());
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             accountService.update(account);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return "account/profile";
+    }
+
+    /**
+     * FastDFS 下载文件
+     *
+     * @param resp
+     * @return
+     */
+    @RequestMapping("/down")
+    @ResponseBody
+    public ResponseEntity<byte[]> down(HttpServletResponse resp) {
+
+        DownloadByteArray cb = new DownloadByteArray();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "aaa.xx");
+        byte[] bs = fileStorageClient.downloadFile("group1", "M00/00/00/wKiWDV0vAb-AcOaYABf1Yhcsfws9181.xx", cb);
+
+        return new ResponseEntity<>(bs,headers, HttpStatus.OK);
     }
 }

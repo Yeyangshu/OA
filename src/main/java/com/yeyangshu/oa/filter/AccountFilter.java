@@ -53,12 +53,12 @@ public class AccountFilter implements Filter {
         }
 
         // 判断已登录用户是否具有访问当前页面权限
-        if (!hasAuth(account.getPermissionList(), uri)) {
-            request.setAttribute("msg", "您无权访问当前页面:" + uri);
-            // getRequestDispatcher服务器端跳转，浏览器没有感知，url不变
-            request.getRequestDispatcher("/errorPage").forward(request, response);
-            return;
-        }
+//        if (!hasAuth(account.getPermissionList(), uri)) {
+//            request.setAttribute("msg", "您无权访问当前页面:" + uri);
+//            // getRequestDispatcher服务器端跳转，浏览器没有感知，url不变
+//            request.getRequestDispatcher("/errorPage").forward(request, response);
+//            return;
+//        }
 
         // 控制台输出请求的url
         System.out.println("-------filter--------" + uri);
@@ -87,12 +87,12 @@ public class AccountFilter implements Filter {
         Filter.super.init(filterConfig);
     }
 
-    private boolean hasAuth(List<Permission> permissionList, String uri) {
-        for (Permission permission : permissionList) {
-            if (uri.startsWith(permission.getUri())) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    private boolean hasAuth(List<Permission> permissionList, String uri) {
+//        for (Permission permission : permissionList) {
+//            if (uri.startsWith(permission.getUri())) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 }
